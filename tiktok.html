@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Digital ala TikTok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. Reset & Base Style --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            background-color: #000;
+            overflow: hidden; /* Scroll terkunci di awal */
+        }
+
+        /* --- 2. Splash Screen (Logo TikTok) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .tiktok-logo {
+            width: 80px;
+            fill: white;
+            filter: drop-shadow(2px 0px 0px #fd2d55) drop-shadow(-2px 0px 0px #25f4ee);
+        }
+
+        /* --- 3. Welcome Screen (Layar Pembuka) --- */
+        #welcome-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('assets/bg-welcome.jpg') center/cover; /* Ganti dengan gambar asetmu */
+            background-color: #1a1a1a;
+            display: none; /* Muncul via JS */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 800;
+            color: white;
+            text-align: center;
+        }
+
+        .btn-open {
+            margin-top: 20px;
+            padding: 15px 35px;
+            background-color: #fe2c55;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(254, 44, 85, 0.5);
+            transition: transform 0.2s;
+        }
+        .btn-open:active { transform: scale(0.95); }
+
+        /* --- 4. Main Content (Isi Undangan) --- */
+        #main-content {
+            display: none;
+            min-height: 100vh;
+            background: #fff;
+            padding: 40px 15px;
+            text-align: center;
+        }
+
+        .invitation-card {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        h1 { margin-bottom: 10px; color: #333; }
+
+        /* --- 5. Video Container (Gaya TikTok) --- */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            height: 600px;
+            margin: 25px auto;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Video Aset Sendiri */
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Video memenuhi container */
+        }
+
+        /* Overlay Aksi (Kanan) */
+        .action {
+            position: absolute;
+            right: 12px;
+            bottom: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            z-index: 10;
+        }
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+        .action-item i { font-size: 28px; margin-bottom: 4px; }
+        .fa-heart { color: #fe2c55; } /* Hati merah */
+
+        .profile-pic {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid white;
+            background: url('assets/profile.jpg') center/cover; /* Ganti foto profil */
+            background-color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        /* Overlay Info (Bawah Kiri) */
+        .video-info {
+            position: absolute;
+            left: 15px; bottom: 25px;
+            color: white; text-align: left; z-index: 10;
+            max-width: 80%;
+            text-shadow: 1px 1px 4px rgba(0,0,0,1);
+        }
+        .username { font-weight: bold; margin-bottom: 6px; font-size: 1.1rem; }
+        .caption { font-size: 0.9rem; line-height: 1.4; }
+        .hashtag { font-weight: bold; }
+
+        /* Section Tambahan */
+        .content-extra {
+            width: 100%;
+            max-width: 350px;
+            height: 600px;
+            background: #f4f4f4;
+            margin: 25px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            border: 1px dashed #bbb;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <svg class="tiktok-logo" viewBox="0 0 448 512">
+            <path d="M448 209.91a210.06 210.06 0 0 1-122.77-39.25V349.38A162.55 162.55 0 1 1 185 188.31V278.2a74.62 74.62 0 1 0 52.23 71.18V0l88 0a121.18 121.18 0 0 0 1.86 22.32c7.87 33.35 27.34 62.39 55.06 81.71 25.55 17.79 56.14 27.8 85.85 28.51z"/>
+        </svg>
+    </div>
+
+    <div id="welcome-screen">
+        <h2 style="font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Wedding Invitation</h2>
+        <h1 style="font-size: 2.5rem; margin-top: 10px;">Bima & Iccah</h1>
+        <button class="btn-open" onclick="openInvitation()">Buka Undangan</button>
+    </div>
+
+    <div id="main-content">
+        <div class="invitation-card">
+            <h1>The Wedding Of</h1>
+            <p style="color: #666;">Kepada Bapak/Ibu/Saudara/i, kami mengundang Anda untuk hadir.</p>
+
+            <div class="video-container">
+                <div class="action">
+                    <div class="profile-pic"></div>
+                    <div class="action-item"><i class="fas fa-heart"></i><span>12.5K</span></div>
+                    <div class="action-item"><i class="fas fa-comment-dots"></i><span>850</span></div>
+                    <div class="action-item"><i class="fas fa-bookmark"></i><span>2.1K</span></div>
+                    <div class="action-item"><i class="fas fa-share"></i><span>Share</span></div>
+                </div>
+
+                <div class="video-info">
+                    <p class="username">@Bima❤️Iccah</p>
+                    <p class="caption">
+                        Gak sabar nunggu hari H! ❤️ Sampai jumpa di pelaminan! 
+                        <span class="hashtag">#TheWedding #BimaIccah #LoveStory</span>
+                    </p>
+                </div>
+
+                <video id="video-invitation" loop playsinline>
+                    <source src="video-undangan.mp4" type="video/mp4">
+                    Browser Anda tidak mendukung tag video.
+                </video>
+            </div>
+
+            <div class="content-extra">Informasi Lokasi & Maps</div>
+            <div class="content-extra">Gallery Foto</div>
+            <p style="margin-top: 20px; font-size: 0.8rem; color: #999;">Dibuat dengan ❤️ untuk Bima & Iccah</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Logika Splash Screen (3 detik)
+        setTimeout(() => {
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'flex';
+        }, 3000);
+
+        // 2. Fungsi Buka Undangan
+        function openInvitation() {
+            // Sembunyikan Welcome Screen
+            document.getElementById('welcome-screen').style.display = 'none';
+            
+            // Tampilkan Konten Utama
+            document.getElementById('main-content').style.display = 'block';
+            
+            // Aktifkan Scroll
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflow = 'auto';
+
+            // Mainkan Video Aset Sendiri
+            const vid = document.getElementById('video-invitation');
+            
+            // Memulai video dengan suara (setelah interaksi klik)
+            vid.muted = false; 
+            vid.play().catch(error => {
+                // Jika autoplay diblokir browser, putar dalam keadaan mute
+                console.log("Autoplay diblokir, memutar tanpa suara");
+                vid.muted = true;
+                vid.play();
+            });
+        }
+    </script>
+</body>
+</html>
