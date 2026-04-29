@@ -1,61 +1,102 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Digital ala TikTok</title>
+    <title>Undangan Digital Bima & Iccah</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <style>
         /* --- 1. Reset & Base Style --- */
+        :root {
+            --primary-color: #795548;
+            /* Contoh warna coklat tua */
+            --secondary-color: #D7CCC8;
+            /* Contoh warna krem muda */
+            --text-color: #333;
+            --light-text-color: #666;
+            --bg-light: #F5F5F5;
+            --bg-dark: #A1887F;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Open Sans', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        body, html {
+        body,
+        html {
             height: 100%;
             background-color: #000;
-            overflow: hidden; /* Scroll terkunci di awal */
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            color: white;
         }
 
-        /* --- 2. Splash Screen (Logo TikTok) --- */
+        body.locked {
+            overflow: hidden;
+        }
+
+        /* --- 2. Splash Screen --- */
         #splash-screen {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
+
         .tiktok-logo {
             width: 80px;
             fill: white;
             filter: drop-shadow(2px 0px 0px #fd2d55) drop-shadow(-2px 0px 0px #25f4ee);
+            animation: pulse 1.5s infinite;
         }
 
-        /* --- 3. Welcome Screen (Layar Pembuka) --- */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- 3. Welcome Screen --- */
         #welcome-screen {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('assets/bg-welcome.jpg') center/cover; /* Ganti dengan gambar asetmu */
-            background-color: #1a1a1a;
-            display: none; /* Muncul via JS */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('assets/bg-welcome.jpg') center/cover;
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 800;
-            color: white;
             text-align: center;
+            padding: 20px;
         }
 
         .btn-open {
-            margin-top: 20px;
-            padding: 15px 35px;
+            margin-top: 25px;
+            padding: 15px 40px;
             background-color: #fe2c55;
             color: white;
             border: none;
@@ -63,184 +104,938 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(254, 44, 85, 0.5);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(254, 44, 85, 0.4);
+            transition: 0.3s;
         }
-        .btn-open:active { transform: scale(0.95); }
 
-        /* --- 4. Main Content (Isi Undangan) --- */
+        .btn-open:hover {
+            transform: scale(1.05);
+            background-color: #ff3b63;
+        }
+
+        /* --- 4. Main Content --- */
         #main-content {
             display: none;
-            min-height: 100vh;
-            background: #fff;
-            padding: 40px 15px;
-            text-align: center;
+            background: #000;
         }
 
-        .invitation-card {
-            max-width: 450px;
-            margin: 0 auto;
-        }
-
-        h1 { margin-bottom: 10px; color: #333; }
-
-        /* --- 5. Video Container (Gaya TikTok) --- */
         .video-container {
             position: relative;
             width: 100%;
-            max-width: 350px;
-            height: 600px;
-            margin: 25px auto;
-            background: #000;
-            border-radius: 15px;
+            max-width: 380px;
+            height: 80vh;
+            margin: 40px auto;
+            background: #111;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(254, 44, 85, 0.2);
         }
 
-        /* Video Aset Sendiri */
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Video memenuhi container */
+            object-fit: cover;
         }
 
-        /* Overlay Aksi (Kanan) */
         .action {
             position: absolute;
-            right: 12px;
-            bottom: 110px;
+            right: 15px;
+            bottom: 100px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 18px;
+            gap: 15px;
             z-index: 10;
         }
+
         .action-item {
+            color: white;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .action-item i {
+            font-size: 26px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .fa-heart {
+            color: #fe2c55;
+        }
+
+        /* --- 5. Sections & Animations --- */
+        section {
+            padding: 60px 20px;
+            min-height: 50vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: white;
-            font-size: 12px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-        }
-        .action-item i { font-size: 28px; margin-bottom: 4px; }
-        .fa-heart { color: #fe2c55; } /* Hati merah */
-
-        .profile-pic {
-            width: 48px; height: 48px; border-radius: 50%;
-            border: 2px solid white;
-            background: url('assets/profile.jpg') center/cover; /* Ganti foto profil */
-            background-color: #ccc;
-            margin-bottom: 5px;
         }
 
-        /* Overlay Info (Bawah Kiri) */
-        .video-info {
-            position: absolute;
-            left: 15px; bottom: 25px;
-            color: white; text-align: left; z-index: 10;
-            max-width: 80%;
-            text-shadow: 1px 1px 4px rgba(0,0,0,1);
+        .animate-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
         }
-        .username { font-weight: bold; margin-bottom: 6px; font-size: 1.1rem; }
-        .caption { font-size: 0.9rem; line-height: 1.4; }
-        .hashtag { font-weight: bold; }
 
-        /* Section Tambahan */
-        .content-extra {
+        .animate-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .poster img {
             width: 100%;
-            max-width: 350px;
-            height: 600px;
-            background: #f4f4f4;
-            margin: 25px auto;
+            max-width: 300px;
+            border-radius: 15px;
+            border: 2px solid #333;
+        }
+
+        .quote {
+            font-style: italic;
+            border-left: 4px solid #fe2c55;
+            padding: 15px;
+            margin: 20px 0;
+            background: #111;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* --- 6. Card & Form Style --- */
+        /* Bagian RSVP */
+        .rsvp-section {
+            background-color: transparent;
+            padding: 80px 0;
+        }
+
+        .rsvp-section h2 {
+            margin-bottom: 10px;
+        }
+
+        .rsvp-prompt {
+            font-style: italic;
+            color: var(--light-text-color);
+            margin-bottom: 20px;
+        }
+
+        .rsvp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .rsvp-form input,
+        .rsvp-form select,
+        .rsvp-form textarea {
+            /* Changed to textarea for consistency */
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: var(--font-body);
+            font-size: 1em;
+        }
+
+        .rsvp-form textarea {
+            /* Corrected from #Ucapan */
+            resize: vertical;
+        }
+
+        .rsvp-form button[type="submit"] {
+            margin: 0;
+            width: 100%;
+        }
+
+        /* Sesuaikan tampilan wadah daftar ucapan */
+        #wishesList {
+            background-color: transparent;
+            /* Latar belakang transparan atau sesuai keinginan */
+            backdrop-filter: blur(0px);
+            /* Hapus blur jika tidak diperlukan */
+            font-size: 13px;
+            width: 100%;
+            max-height: 400px;
+            /* Tinggikan sedikit agar lebih banyak ucapan terlihat */
+            margin: 0 auto;
+            max-height: none;
+            /* Hapus batasan tinggi */
+            overflow-y: visible;
+            /* Hapus scrollbar internal */
+            padding: 0;
+            /* Hapus padding internal jika tidak diperlukan */
+            border-radius: 5px;
+            box-sizing: border-box;
+            /* Gunakan auto agar scrollbar muncul hanya saat dibutuhkan */
+            color: #333;
+            /* Gunakan warna teks standar */
+            margin-bottom: 1rem;
+        }
+
+        /* Gaya untuk setiap kartu ucapan */
+        .wish-card {
+            display: flex;
+            align-items: flex-start;
+            /* Mengatur item agar sejajar di bagian atas */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            /* Jarak antar kartu */
+            gap: 15px;
+            /* Jarak antara inisial dan konten */
+            word-wrap: break-word;
+            /* Memastikan teks panjang pecah baris */
+        }
+
+        /* Gaya untuk lingkaran inisial */
+        .wish-initials {
+            flex-shrink: 0;
+            /* Mencegah inisial menyusut */
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #795548;
+            /* Warna latar belakang inisial */
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            /* Agar inisial selalu huruf besar */
+        }
+
+        /* Gaya untuk konten ucapan (nama, pesan, timestamp) */
+        .wish-content {
+            flex-grow: 1;
+            /* Memungkinkan konten mengambil sisa ruang */
+            text-align: left;
+            /* Teks konten rata kiri */
+            color: #333;
+        }
+
+        .wish-content .wish-name {
+            font-weight: 600;
+            color: #795548;
+            margin-bottom: 5px;
+            text-align: left;
+            /* Nama rata kiri */
+        }
+
+        .wish-content .wish-message {
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #666;
+            margin-bottom: 8px;
+            text-align: left;
+            /* Pesan rata kiri */
+        }
+
+        .wish-content .wish-timestamp {
+            font-size: 0.8em;
+            color: #999;
+            text-align: left;
+            /* Timestamp rata kiri */
+            display: block;
+            /* Agar timestamp di baris baru */
+        }
+
+        /* Tambahkan ini ke file CSS utama Anda */
+        .attendance-status {
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-hadir {
+            color: green;
+            /* Atau warna lain yang Anda suka untuk 'Hadir' */
+        }
+
+        .status-tidak-hadir {
+            color: red;
+            /* Atau warna lain yang Anda suka untuk 'Tidak Hadir' */
+        }
+
+
+        /* Styling for the sticker selection */
+        .sticker-selection {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .sticker-selection label {
+            display: block;
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .sticker-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sticker-item {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: border-color 0.2s ease;
+            width: 60px;
+            /* Adjust sticker size as needed */
+            height: 60px;
+            /* Adjust sticker size as needed */
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 15px;
-            border: 1px dashed #bbb;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .sticker-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Ensure sticker fits without cropping */
+            display: block;
+        }
+
+        .sticker-item.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style for displayed sticker in wish-card */
+        .wish-sticker {
+            width: 50px !important;
+            /* Size of sticker in wish card */
+            height: 50px !important;
+            /* Size of sticker in wish card */
+            opacity: 1 !important;
+            display: block !important;
+            height: 40px;
+            object-fit: contain;
+            margin-left: 10px;
+            /* Space between message and sticker */
+        }
+
+        /* ... (Kode CSS Anda yang sudah ada untuk .wish-card, .wish-initials, dll.) ... */
+
+        /* Gaya untuk kontrol pagination */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 25px;
+            /* Jarak dari daftar ucapan */
+            gap: 15px;
+            /* Jarak antar elemen pagination */
+            padding-bottom: 20px;
+            /* Padding di bagian bawah section */
+        }
+
+        .pagination-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: #5D4037;
+            /* Warna hover yang sedikit lebih gelap */
+        }
+
+        .pagination-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .page-info {
+            font-size: 1.1em;
+            color: #795548;
+            font-weight: 600;
+        }
+
+        .rsvp-form select {
+            background-color: white;
+            color: #333;
+        }
+
+        #loading {
+            display: none;
+            font-size: 1rem;
+            color: black;
+            font-style: italic;
+            font-weight: bold;
+            width: 30%;
+            padding: 5px;
+            text-shadow: -1px -1px 0 #F5F5F5,
+                1px -1px 0 #F5F5F5,
+                -1px 1px 0 #F5F5F5,
+                1px 1px 0 #F5F5F5;
+            /* Warna border */
+        }
+
+        h9 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            color: #795548;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+            /* Warna border */
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Sembunyikan footer secara default jika welcome-screen aktif */
+        #welcome-screen~footer {
+            display: none;
+        }
+
+        footer {
+            display: none;
+            /* Tetap sembunyi di awal */
+            width: 100%;
+            /* Lebar penuh layar */
+            background-color: white;
+            /* Latar belakang putih */
+            padding: 10px 0;
+            /* Memberi ruang atas dan bawah */
+            text-align: center;
+            /* Mengetengahkan semua teks/elemen di dalamnya */
+            border-top: 1px solid #eaeaea;
+            /* Opsional: garis tipis agar lebih rapi */
+        }
+
+        footer .container {
+            width: 100%;
+            max-width: 600px;
+            /* Batasi lebar konten agar tidak terlalu melebar di layar PC */
+            margin: 0 auto;
+            /* Memastikan container berada di tengah layar */
+            font-family: 'Times New Roman', Times, serif;
+            color: black;
+        }
+
+        footer a {
+            color: #fe2c55;
+            /* Mengubah warna link ke merah TikTok agar senada */
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: black;
         }
     </style>
 </head>
-<body>
+
+<body class="locked">
 
     <div id="splash-screen">
         <svg class="tiktok-logo" viewBox="0 0 448 512">
-            <path d="M448 209.91a210.06 210.06 0 0 1-122.77-39.25V349.38A162.55 162.55 0 1 1 185 188.31V278.2a74.62 74.62 0 1 0 52.23 71.18V0l88 0a121.18 121.18 0 0 0 1.86 22.32c7.87 33.35 27.34 62.39 55.06 81.71 25.55 17.79 56.14 27.8 85.85 28.51z"/>
+            <path
+                d="M448 209.91a210.06 210.06 0 0 1-122.77-39.25V349.38A162.55 162.55 0 1 1 185 188.31V278.2a74.62 74.62 0 1 0 52.23 71.18V0l88 0a121.18 121.18 0 0 0 1.86 22.32c7.87 33.35 27.34 62.39 55.06 81.71 25.55 17.79 56.14 27.8 85.85 28.51z" />
         </svg>
     </div>
 
     <div id="welcome-screen">
-        <h2 style="font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">Wedding Invitation</h2>
-        <h1 style="font-size: 2.5rem; margin-top: 10px;">Bima & Iccah</h1>
+        <p style="letter-spacing: 5px; font-size: 0.7rem; color: #fe2c55;">WEDDING INVITATION</p>
+        <h1 style="font-size: 3rem; margin: 10px 0;">Bima & Iccha</h1>
+        <p>Kepada Bapak/Ibu/Saudara/i</p>
         <button class="btn-open" onclick="openInvitation()">Buka Undangan</button>
     </div>
 
     <div id="main-content">
-        <div class="invitation-card">
-            <h1>The Wedding Of</h1>
-            <p style="color: #666;">Kepada Bapak/Ibu/Saudara/i, kami mengundang Anda untuk hadir.</p>
 
-            <div class="video-container">
-                <div class="action">
-                    <div class="profile-pic"></div>
-                    <div class="action-item"><i class="fas fa-heart"></i><span>12.5K</span></div>
-                    <div class="action-item"><i class="fas fa-comment-dots"></i><span>850</span></div>
-                    <div class="action-item"><i class="fas fa-bookmark"></i><span>2.1K</span></div>
-                    <div class="action-item"><i class="fas fa-share"></i><span>Share</span></div>
+        <div class="video-container">
+            <div class="action">
+                <div class="action-item"><i class="fas fa-heart"></i><span>12.5K</span></div>
+                <div class="action-item"><i class="fas fa-comment-dots"></i><span>850</span></div>
+                <div class="action-item"><i class="fas fa-share"></i><span>Share</span></div>
+            </div>
+            <div style="position: absolute; left: 15px; bottom: 20px; z-index: 10;">
+                <p style="font-weight: bold;">@Bima❤️Iccha</p>
+                <p style="font-size: 0.8rem;">Gak sabar nunggu hari H! #15Juni2026</p>
+            </div>
+            <video id="video-invitation" loop playsinline>
+                <source src="video-undangan.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <section class="animate-hidden">
+            <div class="poster"><img src="couple2.jpg" alt="Couple"></div>
+            <h2 style="margin-top: 20px;">The Journey of Love</h2>
+            <h1>Bima & Iccha</h1>
+            <p class="synopsis">Setelah Bima dan Iccha dipertemukan dalam situasi yang tepat, di mana keduanya telah
+                siap untuk memulai hubungan bersama, tibalah mereka di awal perjalanan baru menuju pernikahan.</p>
+            <blockquote class="quote">
+                وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا
+                <br>
+                وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةً ۗاِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ
+                يَّتَفَكَّرُوْنَ
+                <br>
+                <br>
+                "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu
+                sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih
+                dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum
+                yang berpikir." (Surah Ar-Rum : 21)
+            </blockquote>
+        </section>
+
+        <section class="animate-hidden" style="background: #080808;">
+            <h2>Waktu & Lokasi</h2>
+            <div class="list-group-item">
+                <span style="background: #fe2c55; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem;">AKAD
+                    NIKAH</span>
+                <h3 style="margin: 10px 0;">08:00 - 10:00 WITA</h3>
+                <p>15 juni 2026</p>
+            </div>
+            <div class="list-group-item">
+                <span
+                    style="background: #fe2c55; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem;">RESEPSI</span>
+                <h3 style="margin: 10px 0;">12:00 - 16:00 WITA</h3>
+                <p>15 juni 2026</p>
+            </div>
+            <p style="font-size: 0.8rem; color: #888; text-align: center;">Lokasi: Jl. Komplek Kediaman Mempelai Wanita,
+                Samarinda.</p>
+        </section>
+
+        <section class="animate-hidden">
+            <h2>Kado Digital</h2>
+            <div class="list-group-item">
+                <p>BRI - Iccha</p>
+                <p><strong>9876543210</strong></p>
+                <button
+                    style="background: #333; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;"
+                    onclick="copyText('9876543210')">Salin</button>
+            </div>
+        </section>
+
+        <section class="rsvp-section fade-in-section">
+            <div class="container">
+                <h2 class="section-title">RSVP</h2>
+                <p class="rsvp-prompt">Tinggalkan ucapan Anda untuk kami..</p>
+
+                <form class="rsvp-form" method="POST"
+                    action="https://script.google.com/macros/s/AKfycbzZEXcdTIarEeoWIHf0pi0JboUlOaNDa4GjETGxMruNOumMiq0aVnbHhsxeXoBLhcmj/exec">
+                    <label for="namaPengirim" class="form-label">Nama Anda</label>
+                    <input id="namaPengirim" name="Nama" type="text" placeholder="Nama" required>
+
+                    <label for="jumlahHadir" class="form-label">Jumlah orang yang hadir</label>
+                    <input id="jumlahHadir" type="number" class="form-control" name="Jumlah" min="1" max="5" value="1">
+
+                    <label for="konfirmasiStatus" class="form-label">Konfirmasi kehadiran</label>
+                    <select id="konfirmasiStatus" name="Status" class="form-select">
+                        <option selected disabled>Pilih Status Kehadiran</option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Tidak Hadir">Tidak Hadir</option>
+                    </select>
+
+                    <label for="ucapanSelamat" class="form-label">Tulis ucapan</label>
+                    <textarea id="ucapanSelamat" name="Ucapan" placeholder="Tulis ucapan" rows="5"></textarea>
+
+                    <div class="sticker-selection">
+                        <label>Pilih Stiker:</label>
+                        <div class="sticker-options" id="stickerOptions">
+                        </div>
+                        <input type="hidden" id="selectedSticker" name="Sticker" value="">
+                    </div>
+                    <button id="btn-rsvp" type="submit">Kirim</button>
+                </form>
+
+                <div id="loading">Loading...</div>
+                <h9>Ucapan Tercatat:</h9>
+                <div class="wishesList-container" id="wishesList">
                 </div>
 
-                <div class="video-info">
-                    <p class="username">@Bima❤️Iccah</p>
-                    <p class="caption">
-                        Gak sabar nunggu hari H! ❤️ Sampai jumpa di pelaminan! 
-                        <span class="hashtag">#TheWedding #BimaIccah #LoveStory</span>
-                    </p>
+                <div class="pagination-controls" id="paginationControls">
+                    <button id="prevPage" class="pagination-btn" disabled>« Sebelumnya</button>
+                    <span id="pageNumbers" class="page-info"></span>
+                    <button id="nextPage" class="pagination-btn" disabled>Selanjutnya »</button>
                 </div>
 
-                <video id="video-invitation" loop playsinline>
-                    <source src="video-undangan.mp4" type="video/mp4">
-                    Browser Anda tidak mendukung tag video.
-                </video>
+            </div>
+        </section>
+
+        <section class="animate-hidden">
+            <h2>Gallery Moment</h2>
+            <div class="gallery-grid">
+                <img src="pre.jpg" alt="1">
+                <img src="pre2.jpg" alt="2">
+                <img src="couple.jpg" alt="3">
+                <img src="map1.jpg" alt="4">
+                <img src="map2.jpg" alt="5">
+                <img src="berita.jpg" alt="6">
+                <img src="episode1.jpg" alt="7">
+                <img src="episode2.jpg" alt="8">
+                <img src="berita.jpg" alt="9">
+                <img src="photo.jpg" alt="10">
+                <img src="photo1.jpg" alt="11">
+                <img src="photo2.jpg" alt="12">
             </div>
 
-            <div class="content-extra">Informasi Lokasi & Maps</div>
-            <div class="content-extra">Gallery Foto</div>
-            <p style="margin-top: 20px; font-size: 0.8rem; color: #999;">Dibuat dengan ❤️ untuk Bima & Iccah</p>
+    </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <p>Made with ❤️ for Bima & Iccha</p>
+                    <small class="block">&copy; 2026 Bimatech. All Rights Reserved.</small>
+                    <small class="block">Design by<br><a class="bi bi-instagram"
+                            href="https://instagram.com/Bimatech_">@Bimatech</a>.</small>
+                </div>
+            </div>
         </div>
+    </footer>
     </div>
 
     <script>
-        // 1. Logika Splash Screen (3 detik)
-        setTimeout(() => {
-            document.getElementById('splash-screen').style.display = 'none';
-            document.getElementById('welcome-screen').style.display = 'flex';
-        }, 3000);
+        // 1. Splash Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    document.getElementById('welcome-screen').style.display = 'flex';
+                }, 800);
+            }, 2000);
+        });
 
-        // 2. Fungsi Buka Undangan
+        // 2. Open Invitation (Kunci perbaikan di sini)
         function openInvitation() {
-            // Sembunyikan Welcome Screen
-            document.getElementById('welcome-screen').style.display = 'none';
-            
-            // Tampilkan Konten Utama
-            document.getElementById('main-content').style.display = 'block';
-            
-            // Aktifkan Scroll
-            document.body.style.overflow = 'auto';
-            document.documentElement.style.overflow = 'auto';
+            const welcome = document.getElementById('welcome-screen');
+            welcome.style.opacity = '0';
 
-            // Mainkan Video Aset Sendiri
-            const vid = document.getElementById('video-invitation');
-            
-            // Memulai video dengan suara (setelah interaksi klik)
-            vid.muted = false; 
-            vid.play().catch(error => {
-                // Jika autoplay diblokir browser, putar dalam keadaan mute
-                console.log("Autoplay diblokir, memutar tanpa suara");
-                vid.muted = true;
-                vid.play();
-            });
+            setTimeout(() => {
+                welcome.style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.querySelector('footer').style.display = 'block'; // TAMPILKAN FOOTER
+                document.body.classList.remove('locked');
+
+                const vid = document.getElementById('video-invitation');
+                vid.play().catch(() => {
+                    vid.muted = true;
+                    vid.play();
+                });
+
+                handleScrollAnimation();
+            }, 500);
+        }
+
+        // 3. Scroll Animation
+        function handleScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-show');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-hidden').forEach(el => observer.observe(el));
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert("Nomor rekening disalin!");
         }
     </script>
+
+    <!-- script ucapan -->
+    <script>
+        /** * 1. INISIALISASI VARIABEL UNTUK PAGINATION (PEMBAGIAN HALAMAN)
+         * allWishes: Menyimpan semua data ucapan yang ditarik dari database.
+         * wishesPerPage: Menentukan berapa banyak kartu ucapan yang muncul di satu halaman.
+         * currentPage: Menandai halaman mana yang sedang dilihat oleh tamu.
+         */
+        let allWishes = [];
+        const wishesPerPage = 5;
+        let currentPage = 1;
+
+        // Mengambil elemen-elemen HTML untuk kontrol pagination dan daftar ucapan
+        const wishesListContainer = document.getElementById('wishesList');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const pageNumbersSpan = document.getElementById('pageNumbers');
+        const paginationControls = document.getElementById('paginationControls');
+
+        /**
+         * 2. DATA STIKER
+         * Menyimpan daftar URL gambar stiker yang bisa dipilih tamu saat mengirim ucapan.
+         */
+        const stickers = [
+            { id: 'sticker1', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker1.gif' },
+            { id: 'sticker2', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker2.jpg' },
+            { id: 'sticker3', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker3.gif' },
+            { id: 'sticker4', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker4.jpg' },
+            { id: 'sticker5', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker5.gif' },
+            { id: 'sticker6', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker6.jpg' },
+            { id: 'sticker7', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker7.jpg' },
+            { id: 'sticker8', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker8.jpg' },
+            { id: 'sticker9', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker9.jpg' },
+            { id: 'sticker10', url: 'https://bimawest.github.io/3d-wedding/images/temp/sticker10.gif' },
+        ];
+
+        let selectedStickerUrl = ''; // Variabel sementara untuk menyimpan URL stiker yang diklik
+
+        /**
+         * FUNGSI: renderStickers()
+         * Maksud: Menampilkan pilihan stiker ke layar secara dinamis dan 
+         * menangani logika ketika tamu memilih salah satu stiker.
+         */
+        function renderStickers() {
+            const stickerOptionsContainer = document.getElementById('stickerOptions');
+            stickerOptionsContainer.innerHTML = '';
+
+            stickers.forEach(sticker => {
+                const stickerItem = document.createElement('div');
+                stickerItem.classList.add('sticker-item');
+                stickerItem.dataset.stickerUrl = sticker.url;
+
+                const img = document.createElement('img');
+                img.src = sticker.url;
+                img.alt = `Stiker ${sticker.id}`;
+
+                stickerItem.appendChild(img);
+                stickerOptionsContainer.appendChild(stickerItem);
+
+                // Event listener saat stiker diklik
+                stickerItem.addEventListener('click', () => {
+                    // Menghapus tanda 'selected' dari stiker sebelumnya
+                    const currentSelected = document.querySelector('.sticker-item.selected');
+                    if (currentSelected) {
+                        currentSelected.classList.remove('selected');
+                    }
+                    // Memberikan tanda 'selected' pada stiker yang baru diklik
+                    stickerItem.classList.add('selected');
+                    // Menyimpan URL stiker ke input tersembunyi untuk dikirim ke server
+                    selectedStickerUrl = sticker.url;
+                    document.getElementById('selectedSticker').value = sticker.url;
+                });
+            });
+        }
+
+        renderStickers(); // Jalankan fungsi stiker saat halaman dimuat
+
+        // Mengambil elemen Form RSVP
+        const form = document.querySelector('.rsvp-form');
+        const loading = document.getElementById('loading');
+        const submitButton = document.getElementById('btn-rsvp');
+
+        /**
+         * EVENT LISTENER: form.submit
+         * Maksud: Mengirimkan data (Nama, Kehadiran, Ucapan, Stiker) ke 
+         * Google Apps Script menggunakan metode Fetch API.
+         */
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Mencegah halaman refresh saat submit
+            loading.style.display = 'block'; // Tampilkan loading spinner
+            submitButton.style.display = 'none'; // Sembunyikan tombol submit agar tidak dobel klik
+
+            const formData = new FormData(form);
+
+            // Kirim data ke URL Web App Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbyuR3xcwVyZTdkiVSnYkH2k2DMdZV1GApIGng6j9m3kxrm4NkxMK3YyMzub3qX4q3Lx/exec', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Jaringan bermasalah');
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Ucapan berhasil dikirim!');
+                    form.reset(); // Reset isi form
+                    // Hapus pilihan stiker di tampilan
+                    const currentSelected = document.querySelector('.sticker-item.selected');
+                    if (currentSelected) currentSelected.classList.remove('selected');
+                    selectedStickerUrl = '';
+                    document.getElementById('selectedSticker').value = '';
+
+                    fetchWishes(); // Refresh daftar ucapan agar yang baru muncul
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan: ' + error.message);
+                })
+                .finally(() => {
+                    loading.style.display = 'none'; // Sembunyikan loading
+                    submitButton.style.display = 'block'; // Tampilkan kembali tombol
+                });
+        });
+
+        /**
+         * FUNGSI: generateInitials(name)
+         * Maksud: Membuat huruf inisial dari nama tamu (contoh: "Bima Riski" menjadi "BR").
+         */
+        function generateInitials(name) {
+            const words = name.split(' ').filter(word => word.length > 0);
+            let initials = '';
+            if (words.length === 1) initials = words[0].substring(0, 1);
+            else initials = words[0].substring(0, 1) + words[1].substring(0, 1);
+            return initials.toUpperCase();
+        }
+
+        /**
+         * FUNGSI: formatTimestamp(timestampValue)
+         * Maksud: Mengubah format tanggal mentah dari database menjadi 
+         * format yang enak dibaca (contoh: 29 April 2026, 21:00).
+         */
+        function formatTimestamp(timestampValue) {
+            let date = new Date(timestampValue);
+            if (isNaN(date.getTime())) return 'Data Waktu Invalid';
+
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleString('id-ID', options);
+        }
+
+        /**
+         * FUNGSI: displayWishes(page)
+         * Maksud: Menampilkan daftar ucapan ke HTML sesuai dengan halaman yang aktif.
+         * Fungsi ini juga menangani pembuatan kartu (wish-card) dan penyisipan stiker.
+         */
+        function displayWishes(page) {
+            wishesListContainer.innerHTML = '';
+            const startIndex = (page - 1) * wishesPerPage;
+            const endIndex = startIndex + wishesPerPage;
+            const wishesToShow = allWishes.slice(startIndex, endIndex); // Ambil potongan data per halaman
+
+            // Jika data kosong
+            if (wishesToShow.length === 0 && allWishes.length === 0) {
+                wishesListContainer.innerHTML = '<p style="text-align: center;">Belum ada ucapan.</p>';
+                paginationControls.style.display = 'none';
+                return;
+            }
+
+            wishesToShow.forEach(wish => {
+                const initials = generateInitials(wish.Nama || 'Anonim');
+                const timestamp = wish.Date ? formatTimestamp(wish.Date) : 'Waktu tidak tersedia';
+
+                // Logika untuk menampilkan stiker jika ada
+                let stickerHtml = '';
+                if (typeof wish.Sticker === 'string' && wish.Sticker.trim()) {
+                    stickerHtml = `<img src="${wish.Sticker}" alt="Stiker" class="wish-sticker">`;
+                }
+
+                const kehadiran = wish.Status || 'Belum diisi';
+                const statusClass = (kehadiran.toLowerCase() === 'hadir') ? 'status-hadir' : 'status-tidak-hadir';
+
+                const wishCard = document.createElement('div');
+                wishCard.classList.add('wish-card');
+                wishCard.innerHTML = `
+          <div class="wish-initials">${initials}</div>
+          <div class="wish-content">
+            <p class="wish-name">${wish.Nama || 'Anonim'}</p>
+            <span class="attendance-status ${statusClass}">${kehadiran}</span>
+            <p class="wish-message">${wish.Ucapan || 'Tidak ada ucapan'}</p>
+            <span class="wish-timestamp">${timestamp}</span>
+          </div>
+          ${stickerHtml}
+        `;
+                wishesListContainer.appendChild(wishCard);
+            });
+
+            updatePaginationControls(); // Update tombol Next/Prev
+        }
+
+        /**
+         * FUNGSI: updatePaginationControls()
+         * Maksud: Mengatur apakah tombol "Sebelumnya" atau "Berikutnya" aktif atau mati (disabled).
+         */
+        function updatePaginationControls() {
+            const totalPages = Math.ceil(allWishes.length / wishesPerPage);
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+            pageNumbersSpan.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+            paginationControls.style.display = totalPages > 1 ? 'flex' : 'none';
+        }
+
+        /**
+         * EVENT LISTENERS UNTUK TOMBOL PAGINATION
+         */
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayWishes(currentPage);
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(allWishes.length / wishesPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayWishes(currentPage);
+            }
+        });
+
+        /**
+         * FUNGSI: fetchWishes()
+         * Maksud: Fungsi "Jantung Utama" yang mengambil data ucapan dari Google Sheets.
+         * Menggunakan fetch() untuk menarik JSON dari Apps Script.
+         */
+        function fetchWishes() {
+            wishesListContainer.innerHTML = '';
+            loading.style.display = 'block';
+
+            fetch('https://script.google.com/macros/s/AKfycbyuR3xcwVyZTdkiVSnYkH2k2DMdZV1GApIGng6j9m3kxrm4NkxMK3YyMzub3qX4q3Lx/exec')
+                .then(response => response.json())
+                .then(wishes => {
+                    allWishes = wishes || [];
+                    allWishes.reverse(); // Supaya yang kirim ucapan terakhir ada di paling atas
+                    currentPage = 1;
+                    displayWishes(currentPage);
+                })
+                .catch(error => {
+                    console.error('Error fetching:', error);
+                    wishesListContainer.innerHTML = '<p style="text-align: center; color: red;">Gagal memuat ucapan.</p>';
+                })
+                .finally(() => {
+                    loading.style.display = 'none';
+                });
+        }
+
+        // Menjalankan fetch data ucapan secara otomatis saat halaman pertama kali dibuka
+        fetchWishes();
+    </script>
 </body>
+
 </html>
